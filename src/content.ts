@@ -1,7 +1,12 @@
-function attachVideoControls(video: HTMLVideoElement) {
-  video.controls = true
-  // Remove sibling overlay element that blocks interaction for video on instagram
-  video.nextSibling?.remove()
+// Inject script to bring video controls above overlay so they can be clicked
+const style = document.head.querySelector('style[data-injected-by-vcu=true]')
+if (!style) {
+  console.log('added')
+  const element = document.createElement('style')
+  element.innerText =
+    '::-webkit-media-controls { z-index: 9999; position: relative; }'
+  element.dataset.injectedByVcu = 'true'
+  document.head.appendChild(element)
 }
 
 // Observe changes to dom to find dynamically loaded elements
@@ -14,13 +19,14 @@ const observer = new MutationObserver(mutations => {
 
         // Enable controls for every video element found
         for (const video of videos) {
-          attachVideoControls(video)
+          video.controls = true
         }
       }
     }
   }
 })
 
+// Start listening for mutatin changes on body
 observer.observe(document.body, { childList: true, subtree: true })
 
 // Empty export to make this file a module
