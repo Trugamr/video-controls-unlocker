@@ -1,7 +1,6 @@
 // Inject script to bring video controls above overlay so they can be clicked
 const style = document.head.querySelector('style[data-injected-by-vcu=true]')
 if (!style) {
-  console.log('added')
   const element = document.createElement('style')
   element.innerText =
     '::-webkit-media-controls { z-index: 9999; position: relative; }'
